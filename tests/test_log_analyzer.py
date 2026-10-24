@@ -1,3 +1,4 @@
+
 import unittest
 
 from log_analyzer import parse_failed_login
@@ -14,7 +15,7 @@ class TestLogAnalyzer(unittest.TestCase):
 
         timestamp, username, ip = parse_failed_login(line)
 
-        self.assertEqual(timestamp, "18:21:32")
+        self.assertEqual(timestamp, "Sep 5 18:21:32")
         self.assertEqual(username, "admin")
         self.assertEqual(ip, "192.168.1.50")
 
@@ -27,7 +28,7 @@ class TestLogAnalyzer(unittest.TestCase):
 
         timestamp, username, ip = parse_failed_login(line)
 
-        self.assertEqual(timestamp, "18:26:32")
+        self.assertEqual(timestamp, "Sep 5 18:26:32")
         self.assertEqual(username, "kali")
         self.assertEqual(ip, "10.0.0.25")
 
