@@ -1,0 +1,67 @@
+from collections import Counter
+
+failed_ips = []
+invalid_users = []
+successful_ips = []
+
+def parse_failed_login(line):
+    parts = line.split()
+    timestamp = parts[2]
+    ip = parts[parts.index("from") + 1]
+
+with open("sample_logs/auth.log", "r") as file:
+    for line in file:
+
+        if "Failed password" in line:
+            parts = line.split()
+
+            ip = parts[parts.index("from") + 1]
+            failed_ips.append(ip)
+
+        if "invalid user" in line:
+            parts = line.split()
+
+            username = parts[parts.index("user") + 1]
+            invalid_users.append(username)
+
+        if "Accepted password" in line:
+            parts = line.split()
+
+            ip = parts[parts.index("from") + 1]
+            successful_ips.append(ip)
+
+
+print("Failed Login Attempts:")
+print("----------------------")
+
+for ip, count in Counter(failed_ips).items():
+    print(f"{ip}: {count} failed attempts")
+
+
+print("\nInvalid Usernames:")
+print("-----------------")
+
+for username, count in Counter(invalid_users).items():
+    print(f"{username}: {count} attempts")
+
+
+print("\nSuccessful Logins:")
+print("------------------")
+
+for ip, count in Counter(successful_ips).items():
+    print(f"{ip}: {count} successful login(s)")
+
+
+print("\nPotential Brute-Force Success:")
+print("-----------------")
+
+failed_counts = Counter(failed_ips)
+
+for ip in successful_ips:
+    if failed_counts[ip] >=5:
+      print(
+             f"[ALERT] {ip} had "
+             f"{failed_counts[ip]} failed attempts"
+             f" followed by successful login"
+           )
+
